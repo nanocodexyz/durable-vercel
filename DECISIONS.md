@@ -1,5 +1,9 @@
 # Decisions
 
+## nanocode-ts build-1ee1936
+
+On 2026-11-16 the app moved from nanocode-ts build-39e67dc to build-1ee1936 (SDK 92c9c22fa) with no source change: `tsc --noEmit` and `npm run build` passed.
+
 ## nanocode-ts build-02d2a82
 
 On 2026-11-16 the app moved from nanocode-ts build-af0f71b to build-02d2a82 with no source change: `npm run check`, `npm run build` and `npm run drill` passed. The local harness from the build-95de2ce entry ran five interleaved rounds per build (load average 9). It gave p50/p95 in ms, before then after: server ready 555/748 and 639/661, a cold first event 2358/2503 and 2500/2875, a warm new session's first event 782/865 and 804/848, a follow-up 818/851 and 779/865, a warm resume 17/18 and 14/19, and a resume after the restart 1001/1189 and 1195/1304. The resume after the restart is the one difference outside the spread of five runs and needs more samples. The other differences are inside it.
