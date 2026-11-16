@@ -1,5 +1,9 @@
 # Decisions
 
+## The clones answer at /claude and /chatgpt
+
+On 2026-11-16 the deployment's own hosts serve the ChatGPT- and Claude-style chats at `/chatgpt` and `/claude`, the paths durable-cloudflare's clones have at https://cloudflare.nanocode.xyz, and `next.config.ts` redirects `/vercel/chatgpt` and `/vercel/claude` there with 308 and the query kept. The pages already answered at the root through the `/vercel/:path*` rewrite, and their assets, fetches and plan routes keep the `/vercel` prefix, which still rewrites. Requests that nanocode-site's Worker forwards carry `x-nanocode-proxy` and keep their `/vercel` path, so the redirects are `missing` that header and https://nanocode.xyz/vercel/chatgpt and /vercel/claude, the X players' URLs and the clones' canonical ones, answer as before; without the condition the Worker would pass the relative `Location` on and send visitors to nanocode.xyz/claude, which is 404. `npm run check` and `npm run build` passed, and under `CHAT_PUBLIC=1 next start` `/claude` and `/chatgpt` answered 200 with their titles and their first `/vercel/_next` script 200, `/vercel/claude` and `/vercel/chatgpt` 308 to them (a POST too, and `?x=1` kept), the same two with an `x-nanocode-proxy` header 200, and `/vercel`, `?theme=claude`, `?theme=codex` and `/vercel/how-it-works` as before. Before the change the deployment answered 200 at both `/vercel/claude` and `/claude`. Not deployed.
+
 ## Next 16.4.6
 
 On 2026-11-16 `next` moved from 16.4.2 to 16.4.6, the `latest` dist-tag, with no source change; the lock changed only `next` and its `@next/env` and `@next/swc-*` packages. On 16.4.2 `npm run build` compiled and then exited 1 with Next's upgrade recommendation. On 16.4.6 `npm run check` passed and `npm run build` compiled in 10.9 s and generated all 7 static pages, and `CHAT_PUBLIC=1 next start` answered 200 for `/chatgpt` and `/claude` with their titles. No model turn ran.
