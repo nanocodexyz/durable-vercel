@@ -39,6 +39,7 @@ export default function Demo(props: { chaos?: boolean; needsToken: boolean; them
       scripts
       storage="nanocode-vercel-durable"
       theme={props.theme}
+      thinking="none"
       {...(props.title ? { title: props.title } : {})}
       token={props.needsToken}
       wallet={{ name: "nanocode on Vercel", relay: href("/api/device/"), websiteUrl: "https://nanocode.xyz/vercel/" }}
