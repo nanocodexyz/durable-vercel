@@ -8,8 +8,8 @@ import { href } from "@/lib/base";
 import { defaultSelection, harnesses, planHarnesses } from "@/lib/settings";
 
 const PROMPTS = [
-  "Clone vercel/ai and chart its largest source files with Python",
-  "Run a WebAssembly add function",
+  "Clone wevm/viem and chart its largest source files with Python",
+  "Build a WebAssembly add function and await add(2, 3)",
   "Store a note in the Tempo gateway's KV and read it back",
   "Search the web with Mercator for today's Tempo news, spending at most $0.05",
 ];
