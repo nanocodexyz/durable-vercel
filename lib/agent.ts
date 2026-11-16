@@ -15,6 +15,8 @@ const token = process.env.CHAT_TOKEN;
 
 const isPublic = !token && process.env.CHAT_PUBLIC === "1";
 
+const directDriveMs = 280_000;
+
 const authorize = (request: Request) => {
   if (token && request.headers.get("authorization") !== `Bearer ${token}`) throw new Response("unauthorized", { status: 401 });
 };
@@ -44,11 +46,11 @@ export const nanocode = App.create({
   hands: { upgrade: upgradeWebSocket, name: "machine" },
   handInstructions: HAND_INSTRUCTIONS,
   durability: process.env.NANOCODE_DURABILITY === "strict" ? "strict" : "on",
-  directDriveMs: 280_000,
+  directDriveMs,
   marks: process.env.HARNESS_MARKS === "1",
   chaos: process.env.HARNESS_CHAOS === "1",
   authorize: token ? authorize : isPublic ? "public" : undefined,
-  mcp: { ...wallets.mcp, store: Listings.store(getCache({ namespace: "nanocode-mcp" })) },
+  mcp: { ...wallets.mcp, failureMs: directDriveMs, store: Listings.store(getCache({ namespace: "nanocode-mcp" })) },
   ...(isPublic ? { maxPrompts: 20, maxPromptCharacters: 2000 } : {}),
 });
 
