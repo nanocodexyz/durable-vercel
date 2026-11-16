@@ -1,5 +1,9 @@
 # Decisions
 
+## Next 16.4.6
+
+On 2026-11-16 `next` moved from 16.4.2 to 16.4.6, the `latest` dist-tag, with no source change; the lock changed only `next` and its `@next/env` and `@next/swc-*` packages. On 16.4.2 `npm run build` compiled and then exited 1 with Next's upgrade recommendation. On 16.4.6 `npm run check` passed and `npm run build` compiled in 10.9 s and generated all 7 static pages, and `CHAT_PUBLIC=1 next start` answered 200 for `/chatgpt` and `/claude` with their titles. No model turn ran.
+
 ## nanocode-ts build-1ee1936
 
 On 2026-11-16 the app moved from nanocode-ts build-39e67dc to build-1ee1936 (SDK 92c9c22fa) with no source change: `tsc --noEmit` and `npm run build` passed.
