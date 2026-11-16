@@ -8,8 +8,7 @@ import { basePath } from "./lib/base.ts";
 const config: NextConfig = {
   assetPrefix: basePath,
   env: { NANOCODE_WASM_HASH: createHash("sha256").update(readFileSync("node_modules/nanocode-ts/dist/nanocode_wasm.wasm")).digest("hex").slice(0, 20) },
-  outputFileTracingIncludes: Object.fromEntries(["/.well-known/workflow/v1/flow", "/api/chat"].map(route => [route, ["./node_modules/nanocode-ts/dist/nanocode_wasm.wasm", "./node_modules/pyodide/**"]])),
-  serverExternalPackages: ["pyodide"],
+  outputFileTracingIncludes: Object.fromEntries(["/.well-known/workflow/v1/flow", "/api/chat"].map(route => [route, ["./node_modules/nanocode-ts/dist/nanocode_wasm.wasm"]])),
   redirects: async () => [
     { destination: basePath, permanent: false, source: "/" },
     { destination: "https://nanocode.xyz/experiments/durable-nanocode-on-vercel", permanent: true, source: `${basePath}/how-it-works` },
