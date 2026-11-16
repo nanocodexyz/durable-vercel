@@ -52,6 +52,7 @@ export const nanocode = App.create({
   authorize: token ? authorize : isPublic ? "public" : undefined,
   mcp: { ...wallets.mcp, failureMs: directDriveMs, store: Listings.store(getCache({ namespace: "nanocode-mcp" })) },
   ...(isPublic ? { maxPrompts: 20, maxPromptCharacters: 2000 } : {}),
+  warmDriveMs: directDriveMs,
 });
 
 export const agent = nanocode.agent;
