@@ -13,6 +13,7 @@ const config: NextConfig = {
   redirects: async () => [
     { destination: basePath, permanent: false, source: "/" },
     { destination: "https://nanocode.xyz/experiments/durable-nanocode-on-vercel", permanent: true, source: `${basePath}/how-it-works` },
+    ...["/chatgpt", "/claude"].map(path => ({ destination: path, missing: [{ key: "x-nanocode-proxy", type: "header" as const }], permanent: true, source: `${basePath}${path}` })),
   ],
   rewrites: async () => [
     { destination: "/", missing: [{ key: "theme", type: "query" }], source: basePath },
