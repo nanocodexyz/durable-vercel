@@ -1,5 +1,9 @@
 # Decisions
 
+## nanocode-ts build-af0f71b
+
+On 2026-11-16 the app moved from nanocode-ts build-95de2ce to build-af0f71b with no source change: `npm run check`, `npm run build` and `npm run drill` passed. The local harness from the build-95de2ce entry ran five interleaved rounds per build on a shared Linux host (load average 18 to 19). It gave p50/p95 in ms, before then after: server ready 700/937 and 654/750, a cold first event 2788/3047 and 2545/3225, a warm new session's first event 918/1104 and 919/984, a follow-up 792/882 and 840/937, a warm resume 9/12 and 14/41, and a resume after the restart 1161/1383 and 1207/1279. Every difference is inside the spread of the runs.
+
 ## nanocode-ts build-95de2ce
 
 On 2026-11-16 the app moved from nanocode-ts build-491fe83 to build-95de2ce with no source change: `npm run check` and `npm run build` passed and `npm run drill` passed every run. A local harness started `next start` on world-local with `scripts/mock-gateway.ts` and `CHAT_PUBLIC=1`, posted a new session, a second new session and a follow-up, read the stream back with GET, then SIGKILLed the server, started it again on the same World, read the stream back and posted one more turn. Five interleaved rounds per build on a shared Linux host (load average 11.2 to 11.7) gave p50/p95 in ms, before then after: server ready 659.4/739.3 and 646.6/848.5, a cold first event 2708.8/2832.4 and 2499.4/2908.8, a warm new session's first event 810.2/871.1 and 870.2/906.2, a follow-up 766.9/887.4 and 790.7/861.5, a warm resume 9.8/23.2 and 12.6/40.5, and a resume after the restart 1109.9/1397.3 and 1139.9/1447.6. Every difference is inside the spread of the runs.
