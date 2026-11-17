@@ -11,7 +11,7 @@ const PROMPTS = [
   "Clone wevm/viem and chart its largest source files with Python",
   "Run a WebAssembly add function",
   "Store a note in the Tempo gateway's KV and read it back",
-  "Search the web with Mercator for today's Tempo news, spending at most $0.05",
+  "Search the web for today's Tempo news",
 ];
 
 export default function Demo(props: { chaos?: boolean; needsToken: boolean; theme: Theme; title?: string }) {

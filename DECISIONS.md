@@ -1,5 +1,9 @@
 # Decisions
 
+## The web chip reads Search the web for today's Tempo news
+
+On 2026-11-17 the homepage chip `Search the web with Mercator for today's Tempo news, spending at most $0.05` becomes `Search the web for today's Tempo news`: without a connected Tempo Wallet and without `TEMPO_SPONSOR_KEY` the Mercator wording ended in `tempo_wallet_required`, while nanocode's native `WebSearch` (Claude) and `web_search` (Codex) run server-side on the AI Gateway key this deployment already pays for, so `Paid by this deployment` is true for it. Measured against https://nanocode-vercel-durable.vercel.app with Claude Haiku 5.5 and no wallet: 2/2 turns completed through `WebSearch`; locally under `next dev` (AI Gateway base URL pointed at a local Anthropic proxy) 3/3 completed (13.5 to 15.3 s); zero failed cells.
+
 ## The WebAssembly chip reads Run a WebAssembly add function again
 
 On 2026-11-16 the homepage chip goes back to `Run a WebAssembly add function`: build-fa6e5fd exports WebAssembly functions synchronously, so the `await add(2, 3)` wording is no longer needed.
