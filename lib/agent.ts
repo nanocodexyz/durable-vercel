@@ -44,6 +44,7 @@ export const wallets = Wallets.create({
     if (!token && !isPublic && process.env.NODE_ENV === "production") throw new Response("set CHAT_TOKEN or CHAT_PUBLIC=1", { status: 401 });
     authorize(request);
   },
+  kv: true,
   scripts: true,
   sponsor,
   ...(process.env.TEMPO_RPC ? { rpc: process.env.TEMPO_RPC } : {}),

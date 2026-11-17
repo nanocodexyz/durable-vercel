@@ -1,5 +1,9 @@
 # Decisions
 
+## A visitor's unpaid gateway KV calls use the session store
+
+On 2026-11-17 `lib/agent.ts` passes `kv: true` to `Wallets.create` (nanocode-ts 1384947): without a connected Tempo Wallet (and when `TEMPO_SPONSOR_KEY` is unset or its payment fails) the Tempo gateway's `kv_set`, `kv_get`, `kv_list` and `kv_delete` are answered from the session's wallet doc in DurableSessions instead of `tempo_wallet_required`, and the chip reads `Store a note in KV and read it back`, since an anonymous visitor's note stays in this deployment's store rather than the gateway. A connected wallet still pays the real gateway. Measured locally under `next dev` with the nanocode-ts 1384947 `dist/` overlaid and Claude Haiku 5.5: 3/3 completed (`mcp__gateway__kv_set`, `mcp__gateway__kv_get`, 3.6 to 6.2 s), zero failed cells.
+
 ## The web chip reads Search the web for today's Tempo news
 
 On 2026-11-17 the homepage chip `Search the web with Mercator for today's Tempo news, spending at most $0.05` becomes `Search the web for today's Tempo news`: without a connected Tempo Wallet and without `TEMPO_SPONSOR_KEY` the Mercator wording ended in `tempo_wallet_required`, while nanocode's native `WebSearch` (Claude) and `web_search` (Codex) run server-side on the AI Gateway key this deployment already pays for, so `Paid by this deployment` is true for it. Measured against https://nanocode-vercel-durable.vercel.app with Claude Haiku 5.5 and no wallet: 2/2 turns completed through `WebSearch`; locally under `next dev` (AI Gateway base URL pointed at a local Anthropic proxy) 3/3 completed (13.5 to 15.3 s); zero failed cells.
