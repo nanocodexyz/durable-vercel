@@ -20,7 +20,7 @@
     "@vercel/functions": "3.10.4",
     "@vercel/oidc": "3.2.0",
     "durable-harness": "0.0.1-beta.6",
-    "nanocode-ts": "https://github.com/nanocodexyz/nanocode-ts/releases/download/build-3aab39a/nanocode-ts-3aab39a.tgz",
+    "nanocode-ts": "https://github.com/nanocodexyz/nanocode-ts/releases/download/build-29a51dc/nanocode-ts-29a51dc.tgz",
     "nds": "https://github.com/nanocodexyz/nds/releases/download/build-5454fa8/nds-5454fa8.tgz",
     "next": "16.4.6",
     "react": "19.3.1",
