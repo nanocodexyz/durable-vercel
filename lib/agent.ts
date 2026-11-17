@@ -17,6 +17,22 @@ const isPublic = !token && process.env.CHAT_PUBLIC === "1";
 
 const directDriveMs = 280_000;
 
+const hex = (name: string): `0x${string}` | undefined => {
+  const value = process.env[name];
+  if (value === undefined) return undefined;
+  if (!/^0x[0-9a-fA-F]+$/.test(value)) throw new Error(`${name} is not a 0x-prefixed hex string`);
+  return value as `0x${string}`;
+};
+
+const sponsorKey = hex("TEMPO_SPONSOR_KEY");
+
+const sponsor = sponsorKey && {
+  key: sponsorKey,
+  account: hex("TEMPO_SPONSOR_ACCOUNT"),
+  allowance: { budget: "0.05", calls: 10, windowMs: 3_600_000 },
+  deposit: { opening: "0.01", topUp: "0.01", maximum: "0.05" },
+};
+
 const authorize = (request: Request) => {
   if (token && request.headers.get("authorization") !== `Bearer ${token}`) throw new Response("unauthorized", { status: 401 });
 };
@@ -29,6 +45,7 @@ export const wallets = Wallets.create({
     authorize(request);
   },
   scripts: true,
+  sponsor,
   ...(process.env.TEMPO_RPC ? { rpc: process.env.TEMPO_RPC } : {}),
 });
 
