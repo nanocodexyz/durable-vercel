@@ -21,7 +21,7 @@ export default function Home() {
         <li><strong>One Workflow run per session.</strong> The nanocode SDK as WebAssembly in a Function, with its journal kept as the run&apos;s steps.</li>
         <li><strong>Survives a dead Function.</strong> Pick &quot;Kill the next tool call&quot; and another Function replays the log and finishes the turn.</li>
         <li><strong>A shell without a machine.</strong> Cells run bash, git, Python and WebAssembly beside the agent.</li>
-        <li><strong>Yours to connect.</strong> Connect adds a Tempo Wallet, your ChatGPT or Claude plan, or your own machine.</li>
+        <li><strong>Yours to connect.</strong> Connect adds Tempo ID, your ChatGPT or Claude plan, or your own machine.</li>
       </Points>
 
       <Terminal>
