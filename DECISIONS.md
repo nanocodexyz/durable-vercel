@@ -1,5 +1,9 @@
 # Decisions
 
+## The WebAssembly chip reads Run a WebAssembly add function again
+
+On 2026-11-16 the homepage chip goes back to `Run a WebAssembly add function`: build-fa6e5fd exports WebAssembly functions synchronously, so the `await add(2, 3)` wording is no longer needed.
+
 ## The deployment pays a visitor's paid tool calls under an allowance
 
 On 2026-11-16 `lib/agent.ts` passes `sponsor` to `Wallets.create` (nanocode-ts 570215d1a, released in build-fa6e5fd) when `TEMPO_SPONSOR_KEY` is set: a visitor without a connected Tempo Wallet gets their paid MCP calls (Tempo gateway KV, Mercator jobs) paid by that key instead of `tempo_wallet_required`, so the KV and Mercator homepage chips complete for an anonymous visitor, and a connected wallet still pays its own calls. `TEMPO_SPONSOR_KEY` is the deployment's secp256k1 private key as 0x hex, and the optional `TEMPO_SPONSOR_ACCOUNT` is the root account when that key is an access key already authorized on Tempo; a malformed value throws at startup. The operator policy is 0.05 USD and 10 paid calls per chat session per hour, which covers the Mercator chip's own 0.05 USD limit (its news job quoted 0.002 USD) and a KV note (0.0005 USD a request), with session channels opened at 0.01 USD, topped up by 0.01 and capped at 0.05. Unset, the demo behaves as before. On build-fa6e5fd `npm run check` and `npm run build` passed; against build-aa3daa2 `npm run check` fails on the unknown `sponsor` option. Not deployed, and no funded key was available to pay a call end to end.
