@@ -1,4 +1,4 @@
-import { execFileSync } from "node:child_process";
+import { spawnSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import type { NextConfig } from "next";
@@ -6,9 +6,13 @@ import { withDurableHarness } from "durable-harness/next";
 import { zyzz } from "zyzz/next";
 import { basePath } from "./lib/base.ts";
 
+const revision = process.env.NANOCODE_COMMIT === undefined ? spawnSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }) : undefined;
+const commit = process.env.NANOCODE_COMMIT ?? (revision?.status === 0 ? revision.stdout.trim() : undefined);
+if (!commit || !/^[0-9a-f]{40}$/i.test(commit)) throw new Error("NANOCODE_COMMIT must be a full 40-character commit; supply it when Git is unavailable");
+
 const config: NextConfig = {
   assetPrefix: basePath,
-  env: { NANOCODE_COMMIT: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(), NANOCODE_TS_RELEASE: JSON.parse(readFileSync("package.json", "utf8")).dependencies["nanocode-ts"], NANOCODE_WASM_SHA256: createHash("sha256").update(readFileSync("node_modules/nanocode-ts/dist/nanocode_wasm.wasm")).digest("hex"), NANOCODE_WASM_HASH: createHash("sha256").update(readFileSync("node_modules/nanocode-ts/dist/nanocode_wasm.wasm")).digest("hex").slice(0, 20) },
+  env: { NANOCODE_COMMIT: commit, NANOCODE_TS_RELEASE: JSON.parse(readFileSync("package.json", "utf8")).dependencies["nanocode-ts"], NANOCODE_WASM_SHA256: createHash("sha256").update(readFileSync("node_modules/nanocode-ts/dist/nanocode_wasm.wasm")).digest("hex"), NANOCODE_WASM_HASH: createHash("sha256").update(readFileSync("node_modules/nanocode-ts/dist/nanocode_wasm.wasm")).digest("hex").slice(0, 20) },
   outputFileTracingIncludes: Object.fromEntries(["/.well-known/workflow/v1/flow", "/api/chat"].map(route => [route, ["./node_modules/nanocode-ts/dist/nanocode_wasm.wasm"]])),
   redirects: async () => [
     { destination: basePath, permanent: false, source: "/" },
