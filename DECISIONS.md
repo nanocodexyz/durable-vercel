@@ -213,3 +213,9 @@ The default deploy commands acquire the repository's `deploy-lock` Git reference
 Validation: `node --check scripts/deploy.ts` and an ignored command-stub harness pass. The harness covers success, dirty checkout, occupied lock, moved master, and build failure for all three hosts (15 cases). The site also passes `pnpm check:types`. Full host builds and live deployment await the release build slot.
 
 - 2026-11-18: Pin the immutable SDK `build-41b0f57` tarball and its resolver-generated integrity. Its agent/Python source epoch is `08a2d14ddcfedcd9fb0b08fffd200584cb09154e`; the independent shell pin is unchanged. Build and check the host before promoting or deploying this candidate.
+
+## 2026-11-18: Build Without Git and Pin the Deployment Project
+
+`next.config.ts` accepts a full 40-character `NANOCODE_COMMIT` supplied at build time, using Git only when no value was supplied. Missing or invalid provenance stops the build. The guarded deploy command passes its checked master commit as a build environment variable and requires a local link to the existing `tempoxyz/nanocode-vercel-durable` project (`prj_gWqROjU2ByCKjShSLkA8th3vxLzu`). It pins that project and the linked organization for the CLI rather than allowing directory-name inference.
+
+Validation: `npm run check`, a one-worker `npm run build` in an ignored source copy without Git, and `npm run drill` (all eight scripted recovery cases) pass. The ignored regression harness passes 22 cases covering explicit and invalid commits, local Git fallback, project-link refusal, environment pinning, and the existing deployment guards. Local `/version` and `/vercel/version` return the supplied commit, release URL and module hash with `Cache-Control: no-store`. No production deployment or live model turn was made for this change.
