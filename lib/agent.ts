@@ -2,6 +2,7 @@ import type { HostTool } from "durable-harness";
 import { getCache, upgradeWebSocket } from "@vercel/functions";
 import { Wallets } from "nanocode-ts/machines/vercel";
 import * as Account from "nanocode-ts/machines/server";
+import { PythonSci } from "nanocode-ts/bash";
 import { App, Listings } from "nanocode-ts/vercel";
 import { href } from "./base.ts";
 import { defaultSelection, harnesses, planHarnesses } from "./settings.ts";
@@ -71,6 +72,7 @@ export const nanocode = App.create({
   mcp: { ...wallets.mcp, failureMs: directDriveMs, store: Listings.store(getCache({ namespace: "nanocode-mcp" })) },
   ...(isPublic ? { maxPrompts: 20, maxPromptCharacters: 2000 } : {}),
   warmDriveMs: directDriveMs,
+  workspace: { python: { sci: PythonSci.local() } },
 });
 
 export const agent = nanocode.agent;
