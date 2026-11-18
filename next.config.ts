@@ -1,3 +1,4 @@
+import { execFileSync } from "node:child_process";
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import type { NextConfig } from "next";
@@ -7,7 +8,7 @@ import { basePath } from "./lib/base.ts";
 
 const config: NextConfig = {
   assetPrefix: basePath,
-  env: { NANOCODE_WASM_HASH: createHash("sha256").update(readFileSync("node_modules/nanocode-ts/dist/nanocode_wasm.wasm")).digest("hex").slice(0, 20) },
+  env: { NANOCODE_COMMIT: execFileSync("git", ["rev-parse", "HEAD"], { encoding: "utf8" }).trim(), NANOCODE_TS_RELEASE: JSON.parse(readFileSync("package.json", "utf8")).dependencies["nanocode-ts"], NANOCODE_WASM_SHA256: createHash("sha256").update(readFileSync("node_modules/nanocode-ts/dist/nanocode_wasm.wasm")).digest("hex"), NANOCODE_WASM_HASH: createHash("sha256").update(readFileSync("node_modules/nanocode-ts/dist/nanocode_wasm.wasm")).digest("hex").slice(0, 20) },
   outputFileTracingIncludes: Object.fromEntries(["/.well-known/workflow/v1/flow", "/api/chat"].map(route => [route, ["./node_modules/nanocode-ts/dist/nanocode_wasm.wasm"]])),
   redirects: async () => [
     { destination: basePath, permanent: false, source: "/" },
