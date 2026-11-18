@@ -1,5 +1,9 @@
 # Decisions
 
+## Stock nanocode defaults
+
+Georgios, 2026-11-18: the demo runs stock nanocode defaults. `defaultSelection` no longer forces `low` effort (189e2bd, #27, chose Haiku 5.5 at low as the fastest pair); it takes the catalog's default effort for the default model, and visitors can still pick another effort. `directDriveMs` (280 s) stays: it is the Function's `maxDuration` of 300 s on `/api/chat` less a margin, a platform limit, not a tuning. `HARNESS_CHAOS` stays on in Production: it only enables `POST /api/chaos`, which arms a crash when a visitor picks "Kill the next tool call", the feature the home page advertises.
+
 ## Visitors sign in with Tempo ID
 
 Georgios, 2026-11-17: the nanocode demos sign in with Tempo ID (https://id.tempo.xyz) instead of Tempo Wallet. nanocode-ts's `Wallet.connect` (nanocodexyz/nanocode-ts#231) now runs Tempo ID's device grant as `cli:nanocode` and posts form-encoded RFC 8628 bodies to `<relay>code` and `<relay>token`, because Tempo ID's `/device/code` sends no CORS headers. `app/api/device/[step]/route.ts` is now nanocode-ts's `Account.device`, which forwards `code` to `https://id.tempo.xyz/device/code` and `token` to `https://id.tempo.xyz/oauth2/token` with the raw body, content type and any DPoP header, and answers 404 for any other step, so `register` and `wallet.tempo.xyz` are gone. The homepage says Connect adds Tempo ID. A visitor's key saved under `nanocode.machines.wallet` is dropped, so they sign in again.

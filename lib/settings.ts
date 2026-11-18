@@ -39,7 +39,7 @@ export function find(chosen: string): Model | undefined {
   return harnesses.flatMap(entry => entry.models).find(candidate => candidate.id === chosen);
 }
 
-export const defaultSelection: Selection = { model, provider, thinking: find(model)?.efforts.includes("low") ? "low" : find(model)?.effort ?? "medium", ...limit(find(model)) };
+export const defaultSelection: Selection = { model, provider, thinking: find(model)?.effort ?? "medium", ...limit(find(model)) };
 
 function limit(found: Model | undefined): { max_tokens?: number; service_tier?: ServiceTier } {
   return { ...(found?.maxTokens ? { max_tokens: found.maxTokens } : {}), ...(found?.serviceTier ? { service_tier: found.serviceTier } : {}) };
