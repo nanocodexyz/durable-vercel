@@ -211,3 +211,5 @@ The deployed version response records the host commit, the nanocode-ts release U
 The default deploy commands acquire the repository's `deploy-lock` Git reference, rebase on master, and reject unpublished commits. They rebuild, recheck master, and deploy only if it stays unchanged. The lock is removed after a normal exit. After an interrupted process, an operator must inspect the deployment before removing a stale lock. All deploys for one host must use this command.
 
 Validation: `node --check scripts/deploy.ts` and an ignored command-stub harness pass. The harness covers success, dirty checkout, occupied lock, moved master, and build failure for all three hosts (15 cases). The site also passes `pnpm check:types`. Full host builds and live deployment await the release build slot.
+
+- 2026-11-18: Pin the immutable SDK `build-41b0f57` tarball and its resolver-generated integrity. Its agent/Python source epoch is `08a2d14ddcfedcd9fb0b08fffd200584cb09154e`; the independent shell pin is unchanged. Build and check the host before promoting or deploying this candidate.
