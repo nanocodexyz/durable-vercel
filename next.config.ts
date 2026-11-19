@@ -13,7 +13,7 @@ if (!commit || !/^[0-9a-f]{40}$/i.test(commit)) throw new Error("NANOCODE_COMMIT
 const config: NextConfig = {
   assetPrefix: basePath,
   env: { NANOCODE_COMMIT: commit, NANOCODE_TS_RELEASE: JSON.parse(readFileSync("package.json", "utf8")).dependencies["nanocode-ts"], NANOCODE_WASM_SHA256: createHash("sha256").update(readFileSync("node_modules/nanocode-ts/dist/nanocode_wasm.wasm")).digest("hex"), NANOCODE_WASM_HASH: createHash("sha256").update(readFileSync("node_modules/nanocode-ts/dist/nanocode_wasm.wasm")).digest("hex").slice(0, 20) },
-  outputFileTracingIncludes: Object.fromEntries(["/.well-known/workflow/v1/flow", "/api/chat"].map(route => [route, ["./node_modules/nanocode-ts/dist/nanocode_wasm.wasm"]])),
+  outputFileTracingIncludes: { "/.well-known/workflow/v1/flow": ["./node_modules/nanocode-ts/dist/nanocode_wasm.wasm", "./lib/board/board.wasm"], "/api/chat": ["./node_modules/nanocode-ts/dist/nanocode_wasm.wasm"], ...Object.fromEntries(["/api/board", "/api/board/stream", "/api/board/webhook"].map(route => [route, ["./lib/board/board.wasm"]])) },
   redirects: async () => [
     { destination: basePath, permanent: false, source: "/" },
     { destination: "https://nanocode.xyz/experiments/durable-nanocode-on-vercel", permanent: true, source: `${basePath}/how-it-works` },
@@ -29,4 +29,4 @@ const config: NextConfig = {
   ],
 };
 
-export default zyzz(withDurableHarness(config, { agents: ["lib/agent.ts"] }));
+export default zyzz(withDurableHarness(config, { agents: ["lib/agent.ts", "lib/board/agent.ts"] }));

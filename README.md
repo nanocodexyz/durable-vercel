@@ -23,6 +23,21 @@ npm run drill     # Kill a turn midway and check that it resumes
 npx vercel deploy # Deploy to a Vercel project
 ```
 
+## Board
+
+`/board` shows agents coordinating over a shared board, nanocode-board's Rust core compiled to WebAssembly in `board/` and kept in a board session's SQL journal the same way a session keeps its own state: every committed SQL batch is a `nanocode.sql` step of the session's Workflow run. Each write is one keyed submission, and the board settles a key once, so a write sent again after a crash or a redelivered webhook lands in the same row.
+
+- `POST /api/board` with `{"action":"start"}` charters a new board, `{"action":"plan","board":…}` has a lead post a plan with dependencies and starts three workers that claim, split, renew and finish its tasks, and `{"action":"crew","board":…}` adds three more workers.
+- `POST /api/board/webhook?board=…` takes GitHub `issues` and `issue_comment` events, keyed by `X-GitHub-Delivery` and checked against `BOARD_WEBHOOK_SECRET` when it is set, as tasks under `github/`, replies and cancels.
+- `GET /api/board/stream?board=…` streams the board's log as server-sent events from a cursor (`Last-Event-ID` or `after`).
+
+```sh
+npm run board:wasm   # Rebuild lib/board/board.wasm from board/ (Rust with wasm32-unknown-unknown)
+npm run board:drill  # SIGKILL a crew mid-plan, restart it, check every task settles once
+```
+
+`board/Cargo.toml` takes nanocode-board from a local nanocode checkout by path until the board lands on nanocode's main branch, when it moves to a git pin.
+
 `DECISIONS.md` records what each change established, with its measurements.
 
 ## License

@@ -1,0 +1,36 @@
+# The board's Rust core, built to wasm for the Vercel functions (lib/board/board.wasm).
+# nanocode-board comes from a local checkout by path for now; once it lands on nanocode main this
+# switches to the git pin: nanocode-board = { git = "https://github.com/nanocodexyz/nanocode", rev = "<sha>" }.
+[package]
+name = "durable-vercel-board"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "rlib"]
+path = "lib.rs"
+
+[dependencies]
+nanocode-board = { path = "../../repos/nanocodexyz/nanocode/crates/runtime/board" }
+nanocode-durability-core = { path = "../../repos/nanocodexyz/nanocode/crates/core/durability" }
+nanocode-turnlog = { path = "../../repos/nanocodexyz/nanocode/crates/core/turnlog" }
+serde = { version = "1.0.228", features = ["derive"] }
+serde_json = "1.0.149"
+
+[patch.crates-io]
+serde_derive = { path = "../../repos/nanocodexyz/nanocode/crates/core/serde-derive" }
+serde = { path = "../../repos/nanocodexyz/nanocode/crates/patches/serde" }
+serde_core = { path = "../../repos/nanocodexyz/nanocode/crates/patches/serde_core" }
+serde_json = { path = "../../repos/nanocodexyz/nanocode/crates/patches/serde_json" }
+itoa = { path = "../../repos/nanocodexyz/nanocode/crates/core/itoa" }
+memchr = { path = "../../repos/nanocodexyz/nanocode/crates/core/memchr" }
+
+[profile.release]
+opt-level = "s"
+lto = true
+codegen-units = 1
+panic = "abort"
+strip = true
+
+[workspace]
